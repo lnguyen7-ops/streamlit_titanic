@@ -1,1 +1,1 @@
-web: streamlit run titanic_app.py
+web: sh setup.sh && streamlit run titanic_app.py
