@@ -6,9 +6,11 @@ import streamlit as st
 import joblib
 
 # Create a title
-st.title("Our last morning kick off :sob:")
+#st.title("Our last morning kick off :sob:")
 # You can also use markdown syntax. Un-comment the line below to test it out
 #st.write('# Out last morning kick off :sob:')
+# To position text and color, you can use html syntax
+st.markdown("<h1 style='text-align: center; color: blue;'>Our last morning kick off</h1>", unsafe_allow_html=True)
 
 # Now let's do some data science stuff
 # Create a function to load the titanic data
@@ -24,6 +26,7 @@ survived = df["survived"].value_counts(normalize=True)
 # Make bar_chart using quick streamlit way
 #st.bar_chart(survived)
 # Make bar chart using matplotlib
+# Need to create figure object.
 fig, ax = plt.subplots(figsize=(3,3)) # create the figure object with one axis
 ax.bar(survived.index, survived.values) # make bar chart
 ax.set_xticks([0,1]) # set tick mart at value 0 and 1
@@ -59,7 +62,7 @@ price_select = st.selectbox(label="Ticket price ($)", options=price_opts)
 price_group = price_opts.index(price_select) + 1
 # model input
 # This model we loaded requires the following input format.
-# Input is an array of passenger information 
+# Input is an array of passenger information as follows
 # [age, Queenstown, Southhampton, male, travel_alone, price_group]
 passenger_info = [age] + embark_onehot[1:] + [male_int, travel_alone_int, price_group]
 
