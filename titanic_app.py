@@ -8,9 +8,9 @@ import joblib
 # Create a title
 #st.title("Our last morning kick off :sob:")
 # You can also use markdown syntax. Un-comment the line below to test it out
-#st.write('# Out last morning kick off :sob:')
+st.write('# Out last morning kick off :sob:')
 # To position text and color, you can use html syntax
-st.markdown("<h1 style='text-align: center; color: blue;'>Our last morning kick off</h1>", unsafe_allow_html=True)
+#st.markdown("<h1 style='text-align: center; color: blue;'>Our last morning kick off</h1>", unsafe_allow_html=True)
 
 # Now let's do some data science stuff
 # Create a function to load the titanic data
@@ -36,12 +36,6 @@ ax.set_ylabel("Ratio")
 ax.set_title("Titanic Historical Data")
 st.pyplot(fig) # Tell streamlit to render this pyplot object
 
-# import model for prediction
-@st.cache # store model for reuse
-def load_scaler_and_model(scaler, model):
-    return joblib.load(scaler), joblib.load(model)
-scaler_mm, logreg = load_scaler_and_model("scaler_mm_titanic", "logreg_titanic")
-
 '# Passenger information'
 # User inputs
 # Age of passenger
@@ -66,10 +60,13 @@ price_group = price_opts.index(price_select) + 1
 # [age, Queenstown, Southhampton, male, travel_alone, price_group]
 passenger_info = [age] + embark_onehot[1:] + [male_int, travel_alone_int, price_group]
 
-# Scale
-x = scaler_mm.transform(np.array([passenger_info]))
+# import model for prediction
+@st.cache # store model for reuse
+def load_model(model):
+    return joblib.load(model)
+logreg_pipe = load_model("logreg_pipe")
 # Predict
-pred = logreg.predict_proba(x)
+pred = logreg_pipe.predict_proba(np.array([passenger_info]))
 # Show output
 '# Probability'
 f"## Survived :smile:: {pred[0,1]*100:2.4}%"
